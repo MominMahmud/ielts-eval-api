@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, EmailStr
 from datetime import datetime
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Any
 
 # User schemas
 class UserBase(BaseModel):
@@ -19,46 +19,44 @@ class UserResponse(UserBase):
 
 # Essay schemas
 class EssayBase(BaseModel):
-    title: str
-    prompt: str
-    content: str
+    content: str = Field(..., description="The essay content")
+    prompt: str = Field(..., description="The essay prompt/question")
 
 class EssayCreate(EssayBase):
     pass
 
-class EssayResponse(EssayBase):
-    id: int
-    created_at: datetime
-    band_score: Optional[float] = None
-    
-    class Config:
-        from_attributes = True
+class EssayUpdate(EssayBase):
+    pass
 
 # Evaluation schemas
 class EvaluationBase(BaseModel):
-    task_achievement: float = Field(..., ge=0, le=9)
-    coherence_cohesion: float = Field(..., ge=0, le=9)
-    lexical_resource: float = Field(..., ge=0, le=9)
-    grammatical_range: float = Field(..., ge=0, le=9)
-    overall_score: float = Field(..., ge=0, le=9)
-    feedback: str
+    task_achievement: float = Field(..., ge=0, le=9, description="Task Achievement score (0-9)")
+    coherence_cohesion: float = Field(..., ge=0, le=9, description="Coherence and Cohesion score (0-9)")
+    lexical_resource: float = Field(..., ge=0, le=9, description="Lexical Resource score (0-9)")
+    grammatical_range: float = Field(..., ge=0, le=9, description="Grammatical Range and Accuracy score (0-9)")
+    overall_score: float = Field(..., ge=0, le=9, description="Overall band score (0-9)")
+    feedback: str = Field(..., description="Detailed feedback for the essay")
 
 class EvaluationCreate(EvaluationBase):
-    pass
+    essay_id: str
 
 class EvaluationResponse(EvaluationBase):
-    id: int
-    essay_id: int
+    id: str
+    essay_id: str
     created_at: datetime
     updated_at: datetime
-    
+
     class Config:
         from_attributes = True
 
-# Essay with evaluation schema
-class EssayWithEvaluation(EssayResponse):
+class EssayResponse(EssayBase):
+    id: str
+    created_at: datetime
+    updated_at: datetime
+    user_id: Optional[str] = None
+    band_score: Optional[float] = None
     evaluation: Optional[EvaluationResponse] = None
-    
+
     class Config:
         from_attributes = True
 
@@ -71,12 +69,9 @@ class ScoreTrend(BaseModel):
     grammatical_range: float
 
 class EvaluationStats(BaseModel):
+    average_score: float
     total_evaluations: int
-    average_scores: Dict[str, float]
-    best_scores: Dict[str, float]
-    score_trend: List[ScoreTrend]
+    score_distribution: Dict[int, int]
 
     class Config:
-        json_encoders = {
-            datetime: lambda dt: dt.strftime("%Y-%m-%d %H:%M")
-        }
+        from_attributes = True

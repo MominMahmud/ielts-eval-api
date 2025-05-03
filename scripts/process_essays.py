@@ -31,8 +31,19 @@ def process_formatted_essays_file(file_path, db: Session):
         if not block:
             continue
 
-        # Assume first line is the prompt, rest is the essay
+        # Split into lines and process
         lines = block.splitlines()
+        
+        # Extract band score (default to 8.0 if not specified)
+        band_score = 8.0
+        if lines and lines[0].strip().startswith("Band Score:"):
+            try:
+                band_score = float(lines[0].strip().split(":")[1].strip())
+                lines = lines[1:]  # Remove the band score line
+            except (ValueError, IndexError):
+                print(f"Warning: Invalid band score format in essay {i+1}, using default 8.0")
+
+        # First remaining line is the prompt, rest is the essay
         prompt = lines[0].strip()
         essay_content = "\n".join(lines[1:]).strip()
 
@@ -42,7 +53,7 @@ def process_formatted_essays_file(file_path, db: Session):
             prompt=prompt,
             content=essay_content,
             user_id=system_user.id,
-            band_score=8.0
+            band_score=band_score
         )
         db.add(essay)
         essays_added += 1

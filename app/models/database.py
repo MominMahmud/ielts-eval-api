@@ -1,7 +1,8 @@
-from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, create_engine
+from sqlalchemy import Column, Integer, String, Text, Float, DateTime, ForeignKey, create_engine, JSON
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from datetime import datetime
+import uuid
 
 Base = declarative_base()
 
@@ -18,29 +19,34 @@ class User(Base):
 class Essay(Base):
     __tablename__ = "essays"
     
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String(200))
-    prompt = Column(Text)
-    content = Column(Text)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    prompt = Column(String, nullable=False)
+    content = Column(Text, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    user_id = Column(Integer, ForeignKey("users.id"))
     band_score = Column(Float)
     author = relationship("User", back_populates="essays")
+    
+    # Relationship with evaluation
     evaluation = relationship("Evaluation", back_populates="essay", uselist=False)
 
 class Evaluation(Base):
     __tablename__ = "evaluations"
     
-    id = Column(Integer, primary_key=True, index=True)
-    essay_id = Column(Integer, ForeignKey("essays.id"))
-    task_achievement = Column(Float)  # Score 0-9
-    coherence_cohesion = Column(Float)  # Score 0-9
-    lexical_resource = Column(Float)  # Score 0-9
-    grammatical_range = Column(Float)  # Score 0-9
-    overall_score = Column(Float)  # Score 0-9
-    feedback = Column(Text)
+    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    essay_id = Column(String, ForeignKey("essays.id"), nullable=False)
+    task_achievement = Column(Float, nullable=False)
+    coherence_cohesion = Column(Float, nullable=False)
+    lexical_resource = Column(Float, nullable=False)
+    grammatical_range = Column(Float, nullable=False)
+    overall_score = Column(Float, nullable=False)
+    feedback = Column(Text, nullable=False)
+    similar_essays = Column(JSON, nullable=True)  # Store similar essays used in RAG
     created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
     
+    # Relationship with essay
     essay = relationship("Essay", back_populates="evaluation")
 
 # Database connection

@@ -1,19 +1,12 @@
 import os
-from dotenv import load_dotenv
-
-# Load environment variables
-load_dotenv()
-
-# Database settings
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./ielts_evaluator.db")
 
 # API model settings
-API_TYPE = "gemini"
-API_KEY = "AIzaSyBsd81X11RVaGuNXMElguYnyXpMX5WQKi8"
-AI_MODEL = "gemini-1.5-pro"
+API_TYPE = "openrouter"
+API_KEY = "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"
+AI_MODEL = "deepseek/deepseek-r1"
 
 # Security
-SECRET_KEY = os.getenv("SECRET_KEY", "your_secret_key_here")
+SECRET_KEY = "your_secret_key_here"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
