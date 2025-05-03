@@ -7,7 +7,7 @@ import re
 class EssayEvaluator:
     def __init__(self, api_key: Optional[str] = None):
         """Initialize with OpenRouter API key for accessing DeepSeek-R1 model"""
-        self.api_key = api_key or os.getenv("OPENROUTER_API_KEY")
+        self.api_key = "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"
         if not self.api_key:
             raise ValueError("OpenRouter API key not found. Please provide an API key or set OPENROUTER_API_KEY environment variable.")
         
