@@ -1,92 +1,61 @@
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Virtual Environment
-venv/
-env/
-ENV/
-.env
-.venv
-env.bak/
-venv.bak/
+# Testing
+/coverage
 
-# IDE
-.idea/
-.vscode/
-*.swp
-*.swo
+# Production
+/build
+/dist
+
+# Misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
 
 # Logs
-*.log
-logs/
-log/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Database
-*.db
-*.sqlite3
-*.sqlite
-
-# Coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# Distribution
-*.tar.gz
-*.zip
-
-# OS
-.DS_Store
-Thumbs.db
-
-# FastAPI / Uvicorn logs
-*.log
-
-# Pydantic cache
-.pdm.toml
-pdm.lock
-
-# Environments
-.env.*
-venv*/ 
-.envrc
-
-# MyPy
-.mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pytest
-.pytest_cache/
-
-# VS Code
+# Editor directories and files
+.idea/
 .vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
-# Jupyter Notebooks (if used)
-.ipynb_checkpoints/
+# Environment variables
+.env
+.env.*
 
-# __pyinstaller__
-*.manifest
-*.spec
+# TypeScript
+*.tsbuildinfo
 
-# Pyre type checker
-.pyre/
+# Cache
+.cache/
+.npm/
+.eslintcache
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
